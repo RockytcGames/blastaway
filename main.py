@@ -8,6 +8,7 @@ import pygame
 from settings import Settings
 from paddle import Paddle
 from ball import Ball
+from input_controls import Keyboard
 
 
 class Breakout:
@@ -17,6 +18,7 @@ class Breakout:
         self.setup = Settings()
         self._initialize_screen()
         self.clock = pygame.time.Clock()
+        self.input = Keyboard()
         self.ball = Ball(self)
         self.paddle = Paddle(self)
 
@@ -51,11 +53,11 @@ class Breakout:
 
     def _check_keydown_events(self, event):
         """Respond to keypresses"""
-        if event.key == pygame.K_q:
+        if event.key == self.input.quit:
             sys.exit()
-        elif event.key == pygame.K_LEFT:
+        elif event.key == self.input.paddle_left:
             self.setup.paddle['moving_left'] = True
-        elif event.key == pygame.K_RIGHT:
+        elif event.key == self.input.paddle_right:
             self.setup.paddle['moving_right'] = True
 
     def _check_keyup_events(self, event):
