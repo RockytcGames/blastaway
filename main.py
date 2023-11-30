@@ -2,6 +2,7 @@
 
 A clone written in Python with the Pygame Module"""
 import sys
+import random
 
 import pygame
 
@@ -78,6 +79,7 @@ class Breakout:
     def check_ball_paddle_collisions(self):
         if self.ball.rect.colliderect(self.paddle):
             self.ball.y_direction = 'up'
+            self.ball.x_direction = random.choice(['left', 'right'])
 
     def check_ball_wall_collisions(self):
         """Check collisions between the ball and all sides,

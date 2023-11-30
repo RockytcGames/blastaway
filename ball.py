@@ -24,9 +24,9 @@ class Ball(Sprite):
 
     def drop(self):
         """Put the ball on screen center, then start it moving."""
-        time.sleep(1.5)
+        time.sleep(0.5)
         self.rect.center = self.screen_rect.center
-        self.x_direction = random.choice(['left', 'right'])
+        self.x_direction = None
 
     def update(self, *args, **kwargs):
         """Update the ball's position on screen."""
@@ -36,8 +36,10 @@ class Ball(Sprite):
             self.rect.y += self.speed
         if self.x_direction == 'right':
             self.rect.x += self.speed
-        else:
+        elif self.x_direction == 'left':
             self.rect.x -= self.speed
+        elif self.x_direction == None:
+            self.rect.centerx = self.screen_rect.centerx
 
     def draw(self):
         """Draw the ball to the screen."""
