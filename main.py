@@ -19,6 +19,7 @@ class Breakout:
         self._initialize_screen()
         self.clock = pygame.time.Clock()
         self.input = Keyboard()
+        self.game_active = False
         self.ball = Ball(self)
         self.paddle = Paddle(self)
 
@@ -35,10 +36,11 @@ class Breakout:
         self.ball.drop()
         while True:
             self.check_input_events()
-            self.paddle.update()
-            self.ball.update()
-            self.check_ball_paddle_collisions()
-            self.check_ball_wall_collisions()
+            if self.game_active:
+                self.paddle.update()
+                self.ball.update()
+                self.check_ball_paddle_collisions()
+                self.check_ball_wall_collisions()
             self._update_screen()
 
     def check_input_events(self):
@@ -55,10 +57,16 @@ class Breakout:
         """Respond to keypresses"""
         if event.key == self.input.quit:
             sys.exit()
-        elif event.key == self.input.paddle_left:
-            self.setup.paddle['moving_left'] = True
-        elif event.key == self.input.paddle_right:
-            self.setup.paddle['moving_right'] = True
+        elif event.key == self.input.pause:
+            if self.game_active:
+                self.game_active = False
+            elif not self.game_active:
+                self.game_active = True
+        if self.game_active:
+            if event.key == self.input.paddle_left:
+                self.setup.paddle['moving_left'] = True
+            elif event.key == self.input.paddle_right:
+                self.setup.paddle['moving_right'] = True
 
     def _check_keyup_events(self, event):
         """Respond to keyreleases."""
@@ -84,8 +92,9 @@ class Breakout:
     def _update_screen(self):
         """Refresh objects on screen, draw the new screen."""
         self.screen.blit(self.bg_surface, (0, 0))
-        self.paddle.draw()
-        self.ball.draw()
+        if self.game_active:
+            self.paddle.draw()
+            self.ball.draw()
         pygame.display.update()
         self.clock.tick_busy_loop(60)
 
