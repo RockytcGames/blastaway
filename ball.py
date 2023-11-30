@@ -20,14 +20,13 @@ class Ball(Sprite):
         pygame.draw.rect(self.surface, self.setup.color['ball'], self.rect)
         self.speed = 10
         self.x_direction = None
-        self.y_direction = None
+        self.y_direction = 'down'
 
     def drop(self):
         """Put the ball on screen center, then start it moving."""
         time.sleep(1.5)
         self.rect.center = self.screen_rect.center
         self.x_direction = random.choice(['left', 'right'])
-        self.y_direction = 'down'
 
     def update(self, *args, **kwargs):
         """Update the ball's position on screen."""

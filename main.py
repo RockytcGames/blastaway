@@ -22,6 +22,7 @@ class Breakout:
 
     def _initialize_screen(self):
         self.screen = pygame.display.set_mode(self.setup.resolution)
+        self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption('Tc |## Break ## Out ## |')
         self.bg_surface = pygame.Surface(self.setup.resolution)
         self.bg_surface.fill(self.setup.color['background'])
@@ -31,9 +32,11 @@ class Breakout:
         pygame.mouse.set_visible(False)
         self.ball.drop()
         while True:
+            self.check_input_events()
             self.paddle.update()
             self.ball.update()
-            self.check_input_events()
+            self.check_ball_paddle_collisions()
+            self.check_ball_wall_collisions()
             self._update_screen()
 
     def check_input_events(self):
@@ -61,6 +64,20 @@ class Breakout:
             self.setup.paddle['moving_left'] = False
         if event.key == pygame.K_RIGHT:
             self.setup.paddle['moving_right'] = False
+
+    def check_ball_paddle_collisions(self):
+        if self.ball.rect.colliderect(self.paddle):
+            self.ball.y_direction = 'up'
+
+    def check_ball_wall_collisions(self):
+        """Check collisions between the ball and all sides,
+        except the bottom."""
+        if self.ball.rect.top < self.screen_rect.top:
+            self.ball.y_direction = 'down'
+        if self.ball.rect.right > self.screen_rect.right:
+            self.ball.x_direction = 'left'
+        if self.ball.rect.left < self.screen_rect.left:
+            self.ball.x_direction = 'right'
 
     def _update_screen(self):
         """Refresh objects on screen, draw the new screen."""
