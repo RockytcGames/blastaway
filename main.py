@@ -10,6 +10,7 @@ from settings import Settings
 from paddle import Paddle
 from ball import Ball
 from input_controls import Keyboard
+from button import Button
 
 
 class Breakout:
@@ -23,12 +24,13 @@ class Breakout:
         self.game_active = False
         self.ball = Ball(self)
         self.paddle = Paddle(self)
+        self.pause_button = Button(self, 'PAUSE')
 
     def _initialize_screen(self):
-        self.screen = pygame.display.set_mode(self.setup.resolution)
+        self.screen = pygame.display.set_mode(self.setup.resolution['window'])
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption('Tc |## Break ## Out ## |')
-        self.bg_surface = pygame.Surface(self.setup.resolution)
+        self.bg_surface = pygame.Surface(self.setup.resolution['window'])
         self.bg_surface.fill(self.setup.color['background'])
 
     def run(self):
@@ -97,6 +99,8 @@ class Breakout:
         if self.game_active:
             self.paddle.draw()
             self.ball.draw()
+        if not self.game_active:
+            self.pause_button.draw()
         pygame.display.update()
         self.clock.tick_busy_loop(60)
 
