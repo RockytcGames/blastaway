@@ -11,6 +11,7 @@ from paddle import Paddle
 from ball import Ball
 from input_controls import Keyboard
 from button import Button
+import audio
 
 
 class Breakout:
@@ -80,6 +81,7 @@ class Breakout:
 
     def check_ball_paddle_collisions(self):
         if self.ball.rect.colliderect(self.paddle):
+            audio.paddle_hit.play()
             self.ball.y_direction = 'up'
             self.ball.x_direction = random.choice(['left', 'right'])
 
@@ -87,11 +89,17 @@ class Breakout:
         """Check collisions between the ball and all sides,
         except the bottom."""
         if self.ball.rect.top < self.screen_rect.top:
+            audio.paddle_hit.play()
             self.ball.y_direction = 'down'
         if self.ball.rect.right > self.screen_rect.right:
+            audio.paddle_hit.play()
             self.ball.x_direction = 'left'
         if self.ball.rect.left < self.screen_rect.left:
+            audio.paddle_hit.play()
             self.ball.x_direction = 'right'
+        if self.ball.rect.bottom > self.screen_rect.bottom:
+            self.game_active = False
+            self.ball.drop()
 
     def _update_screen(self):
         """Refresh objects on screen, draw the new screen."""
